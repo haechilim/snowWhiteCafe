@@ -4,7 +4,7 @@ var mime = require("mime");
 var request = require('request');
 
 var HOST = "https://www.googleapis.com/youtube/v3/search";
-var KEY = "AIzaSyDs6we2WHPWUkuOgSXn0BtVZ5-EetkdJpo";
+var KEY = "AIzaSyAL_xZqgCXW7htOskwLqW4zpFHJHY5DbCc";
 
 var server = http.createServer(function(request, response) {
 	console.log("요청 URL: ", request.url);
@@ -78,7 +78,7 @@ function getVideoIdJson(callback) {
 }
 
 function getVideoId(body) {
-    if(!body) return;
+    if(body == undefined) return;
 
     var json = JSON.parse(body);
     var items = json.items;
