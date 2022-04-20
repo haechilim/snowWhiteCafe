@@ -51,8 +51,6 @@ console.log("서버 on");
 
 function getVideoUrlJson(callback) {
     request(HOST + "?key=" + KEY + "&part=snippet&channelId=UCbCQDFbLpkurWc4_0R5-pEA&type=video&order=date&maxResults=1&videoDuration=medium", (error, response, body) => {
-        body = '{"kind": "youtube#searchListResponse", "etag": "JDLMl_Jq623tXroNanffh_FkZSI", "nextPageToken": "CAEQAA", "regionCode": "KR","pageInfo": {"totalResults": 176,"resultsPerPage": 1},"items": [{"kind": "youtube#searchResult", "etag": "nrfGihl5430yQT-h7-fTjN6jHLc", "id": {"kind": "youtube#video", "videoId": "siACigYbkgo"},"snippet": {"publishedAt": "2022-04-17T03:00:30Z", "channelId": "UCbCQDFbLpkurWc4_0R5-pEA", "title": "응애가 되었습니다 - [2022년 3월 설백 핫클립 모음!]", "description": "설백 #핑맨 ✿설백 유튜브 구독하기✿ - https://bit.ly/2Oqe86N ✿설백의 트위치 생방송✿ - http://twitch.tv/snow_hite ✿설백의 이메일✿ ...", "thumbnails": {"default": {"url": "https://i.ytimg.com/vi/siACigYbkgo/default.jpg", "width": 120,"height": 90},"medium": {"url": "https://i.ytimg.com/vi/siACigYbkgo/mqdefault.jpg", "width": 320,"height": 180},"high": {"url": "https://i.ytimg.com/vi/siACigYbkgo/hqdefault.jpg", "width": 480,"height": 360}},"channelTitle": "YouTube설백", "liveBroadcastContent": "none", "publishTime": "2022-04-17T03:00:30Z"}}]}';
-
         if(!body) return;
 
         var json = JSON.parse(body);
