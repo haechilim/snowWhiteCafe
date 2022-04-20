@@ -17,9 +17,13 @@ var server = http.createServer(function(request, response) {
 	switch(urlPath) {
 		case "/getUrl":
             getVideoUrlJson((error, json) => {
-                if(error) return;
+                if(!error) jsonResponse(response, json);
+            });
+            return;
 
-                jsonResponse(response, json);
+        case "/getVideoId":
+            getVideoIdJson((error, json) => {
+                if(!error) jsonResponse(response, json);
             });
             return;
 	}
@@ -51,14 +55,7 @@ console.log("서버 on");
 
 function getVideoUrlJson(callback) {
     request(HOST + "?key=" + KEY + "&part=snippet&channelId=UCbCQDFbLpkurWc4_0R5-pEA&type=video&order=date&maxResults=1&videoDuration=medium", (error, response, body) => {
-        if(!body) return;
-
-        var json = JSON.parse(body);
-        var items = json.items;
-
-        if(items.length < 1) return;
-
-        var videoId = items[0].id.videoId;
+        var videoId = getVideoId(body);
         var videoUrl = "https://www.youtube.com/embed/" + videoId;
         var json = {
             url: videoUrl
@@ -66,6 +63,29 @@ function getVideoUrlJson(callback) {
 
         callback(error, json);
     });
+}
+
+function getVideoIdJson(callback) {
+    request(HOST + "?key=" + KEY + "&part=snippet&channelId=UCbCQDFbLpkurWc4_0R5-pEA&type=video&order=date&maxResults=1&videoDuration=medium", (error, response, body) => {
+        var videoId = getVideoId(body);
+        var videoUrl = "https://www.youtube.com/watch?v=" + videoId;
+        var json = {
+            url: videoUrl
+        }
+
+        callback(error, json);
+    });    
+}
+
+function getVideoId(body) {
+    if(!body) return;
+
+    var json = JSON.parse(body);
+    var items = json.items;
+
+    if(items.length < 1) return;
+
+    return items[0].id.videoId;
 }
 
 function jsonResponse(response, data) {
