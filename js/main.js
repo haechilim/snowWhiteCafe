@@ -11,8 +11,13 @@ function checkRedirect() {
     var parameters = getUrlParameters(url);
 
     if(parameters.isRedirect == "true") {
-        requestGetUrl("/getVideoId", json => window.location.href = json.url);
-    }
+		showBody(false);
+		requestGetUrl("/getVideoId", json => window.location.href = json.url);
+	}
+}
+
+function showBody(visibility) {
+	document.getElementsByTagName("body")[0].style.visibility = visibility ? "visible" : "hidden";
 }
 
 function requestGetUrl(path, callback) {
