@@ -5,6 +5,7 @@ var request = require('request');
 
 var HOST = "https://www.googleapis.com/youtube/v3/search";
 var KEY = "AIzaSyAL_xZqgCXW7htOskwLqW4zpFHJHY5DbCc";
+var CHANNEL_ID = "UCbCQDFbLpkurWc4_0R5-pEA";
 
 var server = http.createServer(function(request, response) {
 	console.log("요청 URL: ", request.url);
@@ -16,13 +17,13 @@ var server = http.createServer(function(request, response) {
 	
 	switch(urlPath) {
 		case "/getUrl":
-            getVideoUrlJson((error, json) => {
+            getVideoUrlJson(parameter, (error, json) => {
                 if(!error) jsonResponse(response, json);
             });
             return;
 
         case "/getVideoId":
-            getVideoIdJson((error, json) => {
+            getVideoIdJson(parameter, (error, json) => {
                 if(!error) jsonResponse(response, json);
             });
             return;
@@ -53,8 +54,10 @@ var server = http.createServer(function(request, response) {
 server.listen(9000);
 console.log("서버 on");
 
-function getVideoUrlJson(callback) {
-    request(HOST + "?key=" + KEY + "&part=snippet&channelId=UCbCQDFbLpkurWc4_0R5-pEA&type=video&order=date&maxResults=1&videoDuration=medium", (error, response, body) => {
+function getVideoUrlJson(parameter, callback) {
+	if(!parameter) return;
+
+    request(HOST + "?key=" + KEY + "&part=snippet&channelId=" + CHANNEL_ID + "&type=video&order=date&maxResults=1&videoDuration=" + parameter.videoDuration, (error, response, body) => {
         var videoId = getVideoId(body);
         var videoUrl = "https://www.youtube.com/embed/" + videoId;
         var json = {
@@ -65,8 +68,10 @@ function getVideoUrlJson(callback) {
     });
 }
 
-function getVideoIdJson(callback) {
-    request(HOST + "?key=" + KEY + "&part=snippet&channelId=UCbCQDFbLpkurWc4_0R5-pEA&type=video&order=date&maxResults=1&videoDuration=medium", (error, response, body) => {
+function getVideoIdJson(parameter, callback) {
+	if(!parameter) return;
+
+    request(HOST + "?key=" + KEY + "&part=snippet&channelId=" + CHANNEL_ID + "&type=video&order=date&maxResults=1&videoDuration=medium", (error, response, body) => {
         var videoId = getVideoId(body);
         var videoUrl = "https://www.youtube.com/watch?v=" + videoId;
         var json = {
@@ -83,7 +88,7 @@ function getVideoId(body) {
     var json = JSON.parse(body);
     var items = json.items;
 
-    if(items.length < 1) return;
+    if(!items) return;
 
     return items[0].id.videoId;
 }

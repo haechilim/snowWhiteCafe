@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     checkRedirect();
-    requestGetUrl("/getUrl", json => {
-        document.getElementById("mainFrame").setAttribute('src', json.url);
-        document.getElementById("htmlCode").innerHTML = getHtmlCode(json.url);
-    });
+	requestData();
+	bindEvents();
 });
 
 function checkRedirect() {
@@ -16,8 +14,13 @@ function checkRedirect() {
 	}
 }
 
-function showBody(visibility) {
-	document.getElementsByTagName("body")[0].style.visibility = visibility ? "visible" : "hidden";
+function requestData() {
+	var videoDuration = document.getElementById("videoDuration").checked ? "any" : "medium";
+
+	requestGetUrl("/getUrl?videoDuration=" + videoDuration, json => {
+        document.getElementById("mainFrame").setAttribute('src', json.url);
+        document.getElementById("htmlCode").innerHTML = getHtmlCode(json.url);
+    });
 }
 
 function requestGetUrl(path, callback) {
@@ -34,6 +37,10 @@ function request(url, callback) {
 	
 	xhr.open("GET", url, true);
 	xhr.send();
+}
+
+function bindEvents() {
+	document.getElementById("button").addEventListener("click", () => requestData());
 }
 
 function getUrlParameters(url) {
@@ -56,6 +63,10 @@ function getUrlParameters(url) {
 		var tokens = url.split("?");
 		return tokens.length > 1 ? tokens[1] : "";
 	}
+}
+
+function showBody(visibility) {
+	document.getElementsByTagName("body")[0].style.visibility = visibility ? "visible" : "hidden";
 }
 
 function getHtmlCode(url) {
